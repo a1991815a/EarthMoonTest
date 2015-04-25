@@ -5,6 +5,8 @@ import java.util.Calendar;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.example.utils.MatrixUtils;
+
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -37,7 +39,6 @@ public class OpenglSurfaceView extends GLSurfaceView {
 
 		@Override
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
-			GLES20.glViewport(0, 0, width, height);
 			es_main.viewChanged(width, height);
 		}
 

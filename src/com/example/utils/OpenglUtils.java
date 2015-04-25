@@ -100,6 +100,8 @@ public class OpenglUtils {
 			return;
 		}
 		
+		Log.e("program", String.valueOf(programId));
+		
 		es_context.program = programId;
 	}
 	

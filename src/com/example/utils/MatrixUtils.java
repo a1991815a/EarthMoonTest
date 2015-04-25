@@ -20,7 +20,6 @@ public class MatrixUtils {
 	}
 	
 	public static float[] getFinalMatrix(float[] M_Matrix) {
-		MVP_Matrix = new float[16];
 		Matrix.multiplyMM(MVP_Matrix, 0, V_Matrix, 0, M_Matrix, 0);
 		Matrix.multiplyMM(MVP_Matrix, 0, P_Matrix, 0, MVP_Matrix, 0);
 		return MVP_Matrix;
