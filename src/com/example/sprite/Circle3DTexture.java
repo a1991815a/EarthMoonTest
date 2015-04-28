@@ -23,12 +23,15 @@ public class Circle3DTexture extends SpriteObj {
 	
 	private ShortBuffer indsBuf;
 	private FloatBuffer texBuf;
-	private int textureId = -1;
+	private int[] textureId = new int[]{-1, -1};
 	
-	public Circle3DTexture(float R) {
+	public Circle3DTexture(float circle_r) {
 		super();
-		r = R;
-		initTexture();
+		r = circle_r;
+		initTexture(R.drawable.earth);
+		initTexture(R.drawable.earthn);
+		Log.e("tex", String.valueOf(textureId[0]));
+		Log.e("tex", String.valueOf(textureId[1]));
 		initData();
 	}
 
@@ -99,10 +102,10 @@ public class Circle3DTexture extends SpriteObj {
 		indsBuf = BufferUtils.getInstance().getBuf(inds);
 		texBuf = BufferUtils.getInstance().getBuf(texCoords);
 		
-		for (int i = 0; i < 99; i++) {
-			float out_f = texBuf.get(i);
-			Log.e("texBuf"+String.valueOf(i), String.valueOf(out_f));
-		}
+//		for (int i = 0; i < 99; i++) {
+//			float out_f = texBuf.get(i);
+//			Log.e("texBuf"+String.valueOf(i), String.valueOf(out_f));
+//		}
 		
 		texBuf.position(0);
 		if (caller != null) {
@@ -115,10 +118,15 @@ public class Circle3DTexture extends SpriteObj {
 		GLES20.glUseProgram(es_context.program);
 		initM_Matrix();
 		GLES20.glUniformMatrix4fv(getHandler("uMVPMatrix"), 1, false, MatrixUtils.getFinalMatrix(M_Matrix), 0);
-		if (textureId > -1) {
+		if (textureId[0] > -1) {
 			GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
-//			GLES20.glUniform1i(getHandler("uTexture0"), 0);
+			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId[0]);
+			GLES20.glUniform1i(getHandler("uTexture0"), 0);
+		}
+		if (textureId[1] > -1) {
+			GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId[1]);
+			GLES20.glUniform1i(getHandler("uTexture1"), 1);
 		}
 		GLES20.glVertexAttribPointer(getHandler("aPosition"), 3, GLES20.GL_FLOAT, false, 3*4, vBuf);
 		GLES20.glVertexAttribPointer(getHandler("aTexCoord"), 2, GLES20.GL_FLOAT, false, 2*4, texBuf);
@@ -136,6 +144,7 @@ public class Circle3DTexture extends SpriteObj {
 		}
 		pushHandler(dataType.uniform, "uMVPMatrix");
 		pushHandler(dataType.uniform, "uTexture0");
+		pushHandler(dataType.uniform, "uTexture1");
 		
 		pushHandler(dataType.attribute, "aPosition");
 		pushHandler(dataType.attribute, "aTexCoord");
@@ -151,12 +160,18 @@ public class Circle3DTexture extends SpriteObj {
 	}
 
 	
-	private void initTexture(){
-		int[] texId = new int[1];
-		GLES20.glGenTextures(1, texId, 0);
-		textureId = texId[0];
-		Log.i("initTexture", String.valueOf(textureId));
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+	private void initTexture(int id){
+		int texId = -1;
+		if(textureId[0] == -1){
+			GLES20.glGenTextures(1, textureId, 0);
+			texId = textureId[0];
+		}
+		else if(textureId[0] > -1){
+			GLES20.glGenTextures(1, textureId, 1);
+			texId = textureId[1];
+		}
+//		Log.i("initTexture", String.valueOf(texId));
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texId);
 		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
 		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
 		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
@@ -166,7 +181,7 @@ public class Circle3DTexture extends SpriteObj {
 		Bitmap bitmap = null;
 		
 		try {
-			in_is = MainActivity.context.getResources().openRawResource(R.drawable.earth);
+			in_is = MainActivity.context.getResources().openRawResource(id);
 			bitmap = BitmapFactory.decodeStream(in_is);
 			Log.e("bitmap", String.valueOf(bitmap.getByteCount()));
 			GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
