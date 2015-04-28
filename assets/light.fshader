@@ -4,11 +4,14 @@ uniform vec3 aLightPosition;//光位置
 uniform vec3 aEyePosition;//眼镜位置
 uniform mat4 uMMatrix;//模型矩阵
 
+uniform sampler2D uTexture0;//0号纹理
+
 varying vec3 vNormal;//法向量
 varying vec3 vPosition;//顶点坐标
+varying vec2 vTexCoord;	//纹理坐标
 
 void main(){
-	vec4 colors = vec4(0,1,1,1);
+	vec4 colors = texture2D(uTexture0, vTexCoord);
 	float roughness = 50.0;
 	vec4 environmentIntens = vec4(0.15,0.15,0.15,1);
 	vec4 spIntens = vec4(0.7,0.7,0.7,1);

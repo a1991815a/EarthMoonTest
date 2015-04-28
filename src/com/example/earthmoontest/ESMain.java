@@ -2,6 +2,7 @@ package com.example.earthmoontest;
 
 import com.example.light.LightObj;
 import com.example.sprite.Circle3D;
+import com.example.sprite.Circle3DTexture;
 import com.example.sprite.SpriteObj;
 import com.example.utils.MatrixUtils;
 
@@ -13,7 +14,7 @@ import android.view.MotionEvent;
 public class ESMain {
 	float pre_x,pre_y;
 	
-	Circle3D cle;
+	Circle3DTexture cle;
 	LightObj light;
 	public ESMain() {
 		
@@ -21,7 +22,7 @@ public class ESMain {
 
 	public void start(){
 		SpriteObj.createStaticProgram("vertex.shader", "fragment.shader");
-		cle = new Circle3D(0.5f);
+		cle = new Circle3DTexture(0.5f);
 		
 		light = new LightObj(cle,new float[]{-1, 0, 1},new float[]{0, 0, 30});
 		
@@ -43,7 +44,7 @@ public class ESMain {
 	}
 	
 	public void update(long dt){
-		cle.angle[0] += 5;
+//		cle.angle[0] += 5;
 		cle.angle[1] += 5;
 	}
 	
