@@ -12,7 +12,7 @@ varying vec2 vTexCoord;	//ÎÆÀí×ø±ê
 
 void main(){
 	vec4 colors = texture2D(uTexture0, vTexCoord);
-	float roughness = 50.0;
+	float roughness = 40.0;
 	vec4 environmentIntens = vec4(0.15,0.15,0.15,1);
 	vec4 spIntens = vec4(0.7,0.7,0.7,1);
 	vec4 scIntens = vec4(0.8,0.8,0.8,1);

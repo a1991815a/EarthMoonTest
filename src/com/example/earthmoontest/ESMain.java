@@ -41,6 +41,9 @@ public class ESMain {
 	public void draw(){
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 		cle.visit();
+		int errorId = GLES20.glGetError();
+		if (errorId != 0)
+			Log.e("error", String.valueOf(errorId));
 	}
 	
 	public void update(long dt){

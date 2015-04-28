@@ -44,14 +44,14 @@ public class Circle3DTexture extends SpriteObj {
 		int tex_index = 0;
 		int vertexs_index = 0;
 		
-		int laa_index = 0;
+		float laa_index = 0.0f;
 		
 		for (float la = -90; la <= 90; la+=angleSpan) {
 			double la_radian = Math.toRadians(la);
 			double la_cos = Math.cos(la_radian);
 			double la_sin = Math.sin(la_radian);
 			
-			int loo_index = 0;
+			float loo_index = 0.0f;
 			
 			for (float lo = 0; lo <= 360; lo+=angleSpan) {
 				double lo_radian = Math.toRadians(lo);
@@ -62,8 +62,8 @@ public class Circle3DTexture extends SpriteObj {
 				vertixs[vertexs_index++] = (float) (r * la_sin);
 				vertixs[vertexs_index++] = (float) (r * la_cos * lo_sin);
 				
-				texCoords[tex_index++] = 1 - (loo_index / (lo_count - 1));
-				texCoords[tex_index++] = 1 - (laa_index / (la_count - 1));
+				texCoords[tex_index++] = 1.0f - (float)(loo_index / (lo_count - 1));
+				texCoords[tex_index++] = 1.0f - (float)(laa_index / (la_count - 1));
 				
 				loo_index++;
 			}
@@ -94,10 +94,17 @@ public class Circle3DTexture extends SpriteObj {
 				vCount += 6;
 			}
 		}
+		
 		vBuf = BufferUtils.getInstance().getBuf(vertixs);
 		indsBuf = BufferUtils.getInstance().getBuf(inds);
 		texBuf = BufferUtils.getInstance().getBuf(texCoords);
 		
+		for (int i = 0; i < 99; i++) {
+			float out_f = texBuf.get(i);
+			Log.e("texBuf"+String.valueOf(i), String.valueOf(out_f));
+		}
+		
+		texBuf.position(0);
 		if (caller != null) {
 			caller.initData();
 		}
@@ -161,7 +168,7 @@ public class Circle3DTexture extends SpriteObj {
 		try {
 			in_is = MainActivity.context.getResources().openRawResource(R.drawable.earth);
 			bitmap = BitmapFactory.decodeStream(in_is);
-			
+			Log.e("bitmap", String.valueOf(bitmap.getByteCount()));
 			GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
 		} catch (Exception e) {
 			e.printStackTrace();
